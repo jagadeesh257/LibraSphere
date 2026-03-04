@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LibraSphere App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;scroll-behavior:smooth;}
+body, html{height:100%;}
+
+/* ===== LOGIN PAGE ===== */
+#loginPage{display:flex;justify-content:center;align-items:center;height:100vh;background:url("https://images.unsplash.com/photo-1507842217343-583bb7270b66") center/cover no-repeat;position:relative;}
+#loginPage::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,0.55);}
+.wrapper{position:relative;z-index:2;text-align:center;width:100%;max-width:420px;padding:20px;}
+.logo-img{width:95px;margin-bottom:10px;border-radius:50%;}
+.logo-text{color:#fff;font-size:34px;font-weight:700;}
+.logo-sub{color:#ddd;font-size:14px;margin-bottom:18px;}
+.login-card{background:rgba(255,255,255,0.15);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:28px;box-shadow:0 20px 50px rgba(0,0,0,0.45);}
+.login-card h2{color:#fff;margin-bottom:4px;}
+.welcome{color:#e5e7eb;font-size:13px;margin-bottom:18px;}
+.input{width:100%;padding:13px;margin:8px 0;border-radius:10px;border:none;outline:none;background:rgba(0,0,0,0.55);color:#fff;font-size:14px;}
+.input::placeholder{color:#cbd5e1;}
+.signin-btn{width:100%;padding:13px;margin-top:10px;border:none;border-radius:12px;background:linear-gradient(135deg,#6366f1,#06b6d4);color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:.25s;}
+.signin-btn:hover{transform:translateY(-2px);box-shadow:0 12px 25px rgba(99,102,241,.45);}
+.divider{color:#e5e7eb;margin:16px 0;font-size:13px;}
+.google-btn{width:100%;padding:12px;border-radius:12px;border:none;background:#fff;cursor:pointer;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;}
+.google-btn img{width:20px;}
+.links{display:flex;justify-content:space-between;margin-top:16px;font-size:13px;}
+.links a{color:#fff;text-decoration:none;font-weight:600;}
+.footer{color:#ddd;font-size:12px;margin-top:14px;}
+
+/* ===== LIBRARY PAGE ===== */
+#libraryPage{display:none;}
+.navbar{background:#1e3a5f;color:white;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;}
+.navbar h2{font-weight:600;display:flex;align-items:center;gap:8px;}
+.nav-links{display:flex;align-items:center;gap:15px;}
+.nav-links button{color:white;text-decoration:none;font-weight:500;background:none;border:none;font-size:16px;cursor:pointer;transition:0.3s;}
+.nav-links button:hover{color:#ffcc00;}
+.user-profile{display:flex;align-items:center;gap:10px;cursor:pointer;position:relative;}
+.user-profile img{width:40px;height:40px;border-radius:50%;object-fit:cover;}
+.user-profile span{font-weight:bold;color:white;}
+.signout-btn{position:absolute;top:50%;right:-10px;padding:6px 12px;background:#ffcc00;color:#1e3a5f;border-radius:12px;font-weight:bold;cursor:pointer;transform:translateY(-50%);}
+.signout-btn:hover{background:#ffc107;color:white;}
+.edit-btn{display:block;margin-top:10px;padding:5px 12px;background:#06b6d4;color:white;border-radius:12px;font-size:13px;cursor:pointer;text-decoration:none;}
+.edit-btn:hover{background:#6366f1;}
+
+/* ===== SECTIONS ===== */
+.section{padding:40px;background:#f4f6f9;display:none;}
+.section.active{display:block;}
+.section h2{text-align:center;margin-bottom:25px;}
+.hero{height:55vh;background:url("https://images.unsplash.com/photo-1507842217343-583bb7270b66") center/cover no-repeat;display:flex;flex-direction:column;justify-content:center;align-items:center;color:white;text-align:center;position:relative;padding:0 20px;border-radius:12px;margin-bottom:20px;}
+.hero::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,0.55);border-radius:12px;}
+.hero-content{position:relative;z-index:2;}
+.hero h1{font-size:36px;margin-bottom:10px;}
+.hero p{font-size:18px;font-style:italic;margin-bottom:15px;}
+.hero-btn{padding:12px 25px;background:#ffcc00;color:#1e3a5f;border:none;border-radius:25px;font-weight:bold;text-decoration:none;transition:0.3s;cursor:pointer;}
+.hero-btn:hover{background:#ffc107;color:white;}
+.features{background:#2f6f86;padding:25px;display:flex;justify-content:center;gap:30px;flex-wrap:wrap;border-radius:12px;margin-bottom:30px;}
+.feature{text-align:center;color:white;cursor:pointer;}
+.feature-circle{width:60px;height:60px;background:white;color:#2f6f86;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:auto;margin-bottom:10px;font-weight:bold;transition:0.3s;}
+.feature-circle:hover{background:#ffc107;color:white;}
+.video-card{background:white;padding:10px;border-radius:12px;width:200px;text-align:center;margin:10px;display:inline-block;cursor:pointer;}
+.video-card img{width:100%;border-radius:8px;}
+.video-card h4{margin:8px 0 4px;font-size:14px;}
+.video-card p{font-size:12px;color:#555;}
+.book-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:25px;}
+.book{background:white;border-radius:12px;padding:12px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.08);transition:.35s;cursor:pointer;}
+.book:hover{transform:translateY(-6px) scale(1.03);box-shadow:0 8px 20px rgba(0,0,0,0.15);}
+.book img{width:100%;height:220px;object-fit:cover;border-radius:8px;}
+.book h4{margin:10px 0 5px;}
+.book p{font-size:14px;color:#555;}
+.read-btn{display:inline-block;margin-top:8px;padding:6px 12px;background:#ffcc00;color:#1e3a5f;border-radius:20px;text-decoration:none;font-weight:bold;transition:0.3s;}
+.read-btn:hover{background:#ffc107;color:white;}
+.footer{text-align:center;padding:25px;background:#1e3a5f;color:white;margin-top:40px;border-radius:12px;}
+.footer a{color:#ffcc00;margin:0 10px;text-decoration:none;font-weight:bold;}
+.footer a:hover{color:white;}
+#toastContainer div{pointer-events:none;}
+
+/* Modal */
+#bookModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);justify-content:center;align-items:center;z-index:9999;}
+#bookModalContent{background:white;border-radius:12px;width:80%;height:80%;position:relative;display:flex;flex-direction:column;overflow:hidden;}
+#bookModalContent iframe{flex:1;border:none;border-radius:12px;}
+#closeModal{position:absolute;top:10px;right:15px;background:#ffcc00;color:#1e3a5f;padding:8px 12px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;}
+#closeModal:hover{background:#ffc107;color:white;}
+#searchBar{margin-bottom:20px;text-align:center;}
+#searchInput{width:50%;padding:10px;border-radius:10px;border:1px solid #ccc;font-size:16px;}
+#loadMoreBtn{display:block;margin:20px auto;padding:12px 25px;border:none;border-radius:25px;background:#06b6d4;color:white;font-weight:bold;cursor:pointer;}
+#loadMoreBtn:hover{background:#6366f1;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage">
+  <div class="wrapper">
+    <img src="/mnt/data/1d706acb-365d-4761-9cbd-6dc4f0e59737.jpg" class="logo-img" alt="LibraSphere">
+    <div class="logo-text">LibraSphere</div>
+    <div class="logo-sub">Digital Library Portal</div>
+    <div class="login-card">
+      <h2>Sign in</h2>
+      <div class="welcome">Access your reading universe</div>
+      <input class="input" type="text" id="loginName" placeholder="Username or Email">
+      <input class="input" type="password" id="loginPassword" placeholder="Password">
+      <button class="signin-btn" id="loginBtn">Sign In</button>
+      <button class="signin-btn" id="guestBtn" style="background:linear-gradient(135deg,#06b6d4,#6366f1);margin-top:10px;">Continue as Guest</button>
+      <div class="divider">OR</div>
+      <button class="google-btn">
+        <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png"> Continue with Google
+      </button>
+      <div class="links">
+        <a href="#">Create Account</a>
+        <a href="#">Forgot Password?</a>
+      </div>
+      <div class="footer">© LibraSphere Library</div>
+    </div>
+  </div>
+</div>
+
+<!-- LIBRARY PAGE -->
+<div id="libraryPage">
+  <div class="navbar">
+    <h2>📚 LibraSphere</h2>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <div class="nav-links">
+        <button onclick="showSection('homeSection')">Home</button>
+        <button onclick="showSection('booksSection')">Books</button>
+        <button onclick="showSection('featuresSection')">Features</button>
+        <button onclick="showSection('profileSection')">Profile</button>
+      </div>
+      <div class="user-profile" id="userProfile">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" id="userImg">
+        <span id="userName">Guest</span>
+        <div class="signout-btn" id="signOutBtn">Sign Out</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="section active" id="homeSection">
+    <div class="hero" id="hero">
+      <div class="hero-content">
+        <h1>Welcome to LibraSphere</h1>
+        <p>Access. Ideas. Answers.</p>
+        <button class="hero-btn" onclick="showSection('booksSection')">Explore Books</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOKS -->
+  <div class="section" id="booksSection">
+    <h2>Library Books</h2>
+    <div id="searchBar">
+      <input type="text" id="searchInput" placeholder="Search by title/author">
+    </div>
+    <div class="book-grid" id="bookGrid"></div>
+    <button id="loadMoreBtn">Load More Books</button>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section" id="featuresSection">
+    <h2>Video Tutorials</h2>
+    <div style="text-align:center;">
+      <div class="video-card"><img src="https://images.unsplash.com/photo-1581091870625-7f003f6b1c84"><h4>Physics Lecture</h4><p>1h 20m</p></div>
+      <div class="video-card"><img src="https://images.unsplash.com/photo-1581092160497-7b7b146a02e4"><h4>Math Lecture</h4><p>1h 10m</p></div>
+      <div class="video-card"><img src="https://images.unsplash.com/photo-1581091970236-99cdebe87d70"><h4>Thermodynamics</h4><p>55m</p></div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="section" id="profileSection">
+    <h2>Profile</h2>
+    <div style="text-align:center;">
+      <img id="profilePhoto" src="" style="width:120px;height:120px;border-radius:50%;"><br><br>
+      <h3 id="profileName"></h3>
+      <input type="file" id="uploadPhoto" accept="image/*"><br><br>
+      <input type="file" id="uploadHero" accept="image/*"><label> Upload Dashboard Image</label><br><br>
+      <a class="edit-btn" onclick="editProfile()">Update Name</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>&copy; 2026 LibraSphere Library</p>
+  </div>
+</div>
+
+<!-- BOOK MODAL -->
+<div id="bookModal">
+  <div id="bookModalContent">
+    <button id="closeModal">Close</button>
+    <iframe id="bookIframe"></iframe>
+  </div>
+</div>
+
+<div id="toastContainer" style="position:fixed;bottom:20px;right:20px;z-index:9999;"></div>
+
+<script>
+// DOM Elements
+const loginBtn=document.getElementById("loginBtn");
+const guestBtn=document.getElementById("guestBtn");
+const loginName=document.getElementById("loginName");
+const loginPassword=document.getElementById("loginPassword");
+const loginPage=document.getElementById("loginPage");
+const libraryPage=document.getElementById("libraryPage");
+let currentUser=null;
+const userName=document.getElementById("userName");
+const userImg=document.getElementById("userImg");
+const profileName=document.getElementById("profileName");
+const profilePhoto=document.getElementById("profilePhoto");
+const signOutBtn=document.getElementById("signOutBtn");
+const uploadPhoto=document.getElementById("uploadPhoto");
+const uploadHero=document.getElementById("uploadHero");
+const hero=document.getElementById("hero");
+const bookGrid=document.getElementById("bookGrid");
+const bookModal=document.getElementById("bookModal");
+const bookIframe=document.getElementById("bookIframe");
+const closeModal=document.getElementById("closeModal");
+const searchInput=document.getElementById("searchInput");
+const loadMoreBtn=document.getElementById("loadMoreBtn");
+
+// User UI
+function updateUserUI(){
+  userName.textContent=currentUser.name;
+  userImg.src=currentUser.photo;
+  profileName.textContent=currentUser.name;
+  profilePhoto.src=currentUser.photo;
+  signOutBtn.style.display="block";
+}
+
+// Toast
+function showToast(message,duration=3000){
+  const toast=document.createElement("div");
+  toast.textContent=message;
+  toast.style.background="rgba(30,58,95,0.9)";
+  toast.style.color="white";
+  toast.style.padding="12px 20px";
+  toast.style.marginTop="10px";
+  toast.style.borderRadius="12px";
+  toast.style.boxShadow="0 4px 12px rgba(0,0,0,0.25)";
+  toast.style.fontWeight="600";
+  toast.style.opacity="0";
+  toast.style.transition="opacity 0.4s, transform 0.4s";
+  document.getElementById("toastContainer").appendChild(toast);
+  setTimeout(()=>{toast.style.opacity="1"; toast.style.transform="translateY(-10px)";},100);
+  setTimeout(()=>{toast.style.opacity="0"; toast.style.transform="translateY(0)"; setTimeout(()=>toast.remove(),400)},duration);
+}
+
+// Login
+loginBtn.addEventListener("click",()=>{
+  const name=loginName.value.trim()||"Guest";
+  const password=loginPassword.value.trim();
+  if(password===""){alert("Enter password"); return;}
+  currentUser={name,photo:"https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"};
+  updateUserUI();
+  loginPage.style.display="none";
+  libraryPage.style.display="block";
+  showSection('homeSection');
+  showToast(`Welcome, ${name}!`);
+});
+
+// Guest Login
+guestBtn.addEventListener("click",()=>{
+  currentUser={name:"Guest",photo:"https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"};
+  updateUserUI();
+  loginPage.style.display="none";
+  libraryPage.style.display="block";
+  showSection('homeSection');
+  showToast("Logged in as Guest");
+});
+
+// Sign Out
+signOutBtn.addEventListener("click",()=>{
+  currentUser=null;
+  loginPage.style.display="flex";
+  libraryPage.style.display="none";
+});
+
+// SPA Nav
+function showSection(id){
+  document.querySelectorAll('.section').forEach(sec=>sec.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// Edit Name
+function editProfile(){
+  const newName=prompt("Enter new name",currentUser.name);
+  if(newName) currentUser.name=newName;
+  updateUserUI();
+  showToast("Profile Updated!");
+}
+
+// Upload Profile Photo
+uploadPhoto.addEventListener("change",function(){
+  const file=this.files[0];
+  if(file){
+    const reader=new FileReader();
+    reader.onload=function(e){
+      currentUser.photo=e.target.result;
+      updateUserUI();
+      showToast("Profile Photo Updated!");
+    }
+    reader.readAsDataURL(file);
+  }
+});
+
+// Upload Hero Image
+uploadHero.addEventListener("change",function(){
+  const file=this.files[0];
+  if(file){
+    const reader=new FileReader();
+    reader.onload=function(e){
+      hero.style.background=`url('${e.target.result}') center/cover no-repeat`;
+      showToast("Dashboard Image Updated!");
+    }
+    reader.readAsDataURL(file);
+  }
+});
+
+// ===== OPEN LIBRARY BOOKS =====
+let currentPage=1;
+let currentQuery="";
+
+async function fetchBooks(query="",page=1){
+  const url=`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&page=${page}`;
+  const res=await fetch(url);
+  const data=await res.json();
+  return data.docs.map(book=>{
+    return {
+      title:book.title,
+      author:book.author_name?book.author_name.join(", "):"Unknown",
+      cover:book.cover_i?`https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`:"https://via.placeholder.com/200x300?text=No+Cover",
+      readLink:book.key?`https://openlibrary.org${book.key}`:"#"
+    }
+  });
+}
+
+async function renderBooks(reset=false){
+  if(reset) {bookGrid.innerHTML="";currentPage=1;}
+  const books=await fetchBooks(currentQuery,currentPage);
+  books.forEach(book=>{
+    const div=document.createElement("div");
+    div.className="book";
+    div.innerHTML=`<img src="${book.cover}"><h4>${book.title}</h4><p>${book.author}</p>
+      <a class="read-btn">Read</a>`;
+    div.querySelector(".read-btn").addEventListener("click",()=>{
+      bookIframe.src=book.readLink;
+      bookModal.style.display="flex";
+    });
+    bookGrid.appendChild(div);
+  });
+}
+
+// Load More
+loadMoreBtn.addEventListener("click",()=>{
+  currentPage++;
+  renderBooks();
+});
+
+// Search
+searchInput.addEventListener("input",()=>{
+  currentQuery=searchInput.value;
+  currentPage=1;
+  renderBooks(true);
+});
+
+// Modal Close
+closeModal.addEventListener("click",()=>{bookModal.style.display="none";bookIframe.src="";});
+
+// Initial Load
+renderBooks();
+</script>
+</body>
+</html>
